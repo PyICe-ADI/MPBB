@@ -10,9 +10,9 @@ static uint8_t          watchdog_service_method = 0;
 static uint8_t          crc_poly = 0b00000111;          // X^8 implied
 static bool             service_state = false;
 static uint8_t          SMBUS_addr7 = 0x69;
-static uint8_t          question_addr = 4;
+static uint8_t          question_addr = 0x17;
 static uint32_t         last_service_time;
-static uint8_t          answer_addr = 5;
+static uint8_t          answer_addr = 0x18;
 static bool             use_pec = true;
 
 const PROGMEM uint8_t   WD_response_table[256] = {
