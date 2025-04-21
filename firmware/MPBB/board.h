@@ -13,8 +13,8 @@
 #define _buttonPin      23
 #define PGOODPIN        17
 #define FAULTBPIN       18
-#define D3_LED          19 // D5 PB02 GREEN
-#define D6_LED          31 // D6 PB23 RED
+#define PGOOD_LED       19 // D5 PB02 GREEN
+#define FAULTB_LED      31 // D6 PB23 RED
 #define HEARTBEAT_LED   25 // D3 PB03 ORANGE
 #define WD_DISABLEPIN   2
 #define ENABLEPIN_b     8
