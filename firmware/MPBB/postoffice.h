@@ -22,6 +22,7 @@
 #define WATCHDOG_ADDRESS            7
 #define EEPROM_ADDRESS              8
 #define TMP117_ADDRESS              9
+#define FAULTB_PIN_ADDRESS          10
 
 /****************************************************************************
  * Mail Box Sizes                                                           *
@@ -44,6 +45,9 @@
 #define PGOOD_PIN_INBOX_SIZE        0
 #define PGOOD_PIN_OUTBOX_SIZE       1
 
+#define FAULTB_PIN_INBOX_SIZE       0
+#define FAULTB_PIN_OUTBOX_SIZE      1
+
 #define WATCHDOG_INBOX_SIZE         5
 #define WATCHDOG_OUTBOX_SIZE        4
 
@@ -61,6 +65,7 @@ extern Mailbox<SMBUS_INBOX_SIZE,        SMBUS_OUTBOX_SIZE>          smbus_servic
 extern Mailbox<WDDIS_PIN_INBOX_SIZE,    WDDIS_PIN_OUTBOX_SIZE>      wd_dis_pin_mailbox;
 extern Mailbox<ENABLE_PIN_INBOX_SIZE,   ENABLE_PIN_OUTBOX_SIZE>     enable_pin_mailbox;
 extern Mailbox<PGOOD_PIN_INBOX_SIZE,    PGOOD_PIN_OUTBOX_SIZE>      pgood_pin_mailbox;
+extern Mailbox<FAULTB_PIN_INBOX_SIZE,   FAULTB_PIN_OUTBOX_SIZE>     faultb_pin_mailbox;
 extern Mailbox<WATCHDOG_INBOX_SIZE,     WATCHDOG_OUTBOX_SIZE>       watchdog_mailbox;
 extern Mailbox<EEPROM_INBOX_SIZE,       EEPROM_OUTBOX_SIZE>         eeprom_mailbox;
 extern Mailbox<TMP117_INBOX_SIZE,       TMP117_OUTBOX_SIZE>         tmp117_mailbox;

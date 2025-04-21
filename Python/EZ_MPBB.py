@@ -12,6 +12,5 @@ channel_master.add(MPBB_board)
 channel_master.write("MPBB_enable", "OFF") # Board is stateful
 channel_master.write("MPBB_wd_svc_time", 16000)
 channel_master.write("MPBB_wd_svc_enable", True)
-channel_master.write("MPBB_wddis_pin", False)
-channel_master.write("MPBB_enable", "ON")
+channel_master.write("MPBB_wddis_pin", True)
 channel_master.gui()

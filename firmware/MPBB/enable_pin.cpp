@@ -38,9 +38,9 @@ void set_enable_pin_state()
             {
                 switch(enable_pin_mailbox.inbox[MSG_DATA_BYTE])
                 {
-                    case OFF:   digitalWrite(TESTHOOKPIN, LOW);    digitalWrite(ENABLEPIN_b, HIGH);    break;
-                    case ON:    digitalWrite(TESTHOOKPIN, LOW);    digitalWrite(ENABLEPIN_b, LOW);     break;
-                    case HOOK:  digitalWrite(TESTHOOKPIN, HIGH);   digitalWrite(ENABLEPIN_b, LOW);     break;
+                    case OFF:   digitalWrite(TESTHOOK_PIN, LOW);    digitalWrite(ENABLEB_PIN, HIGH);    break;
+                    case ON:    digitalWrite(TESTHOOK_PIN, LOW);    digitalWrite(ENABLEB_PIN, LOW);     break;
+                    case HOOK:  digitalWrite(TESTHOOK_PIN, HIGH);   digitalWrite(ENABLEB_PIN, LOW);     break;
                 }
             }break;
             case GET_STATE: get_enable_pin_state(); break;
@@ -55,6 +55,6 @@ void get_enable_pin_state()
 {
     enable_pin_mailbox.to_id = enable_pin_mailbox.from_id;
     enable_pin_mailbox.outbox_msg_size = ENABLE_PIN_OUTBOX_SIZE;
-    enable_pin_mailbox.outbox[REPLY_DATA_BYTE] = digitalRead(TESTHOOKPIN) + !digitalRead(ENABLEPIN_b);
+    enable_pin_mailbox.outbox[REPLY_DATA_BYTE] = digitalRead(TESTHOOK_PIN) + !digitalRead(ENABLEB_PIN);
     enable_pin_mailbox.outbox_status = PACKET_PRESENT;
 }

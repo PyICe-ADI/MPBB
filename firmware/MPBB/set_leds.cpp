@@ -7,5 +7,6 @@
 
 void set_leds()
 {
-    digitalWrite(PGOOD_LED, digitalRead(PGOODPIN));
+    digitalWrite(PGOOD_LED, digitalRead(PGOOD_PIN));
+    digitalWrite(FAULTB_LED, !digitalRead(FAULTB_PIN));
 }

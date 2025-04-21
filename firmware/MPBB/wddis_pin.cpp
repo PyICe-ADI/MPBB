@@ -26,8 +26,8 @@ void set_wd_dis_pin_state()
             {
                 switch(wd_dis_pin_mailbox.inbox[DATA_BYTE_IN])
                 {
-                    case ON:    digitalWrite(WD_DISABLEPIN, LOW);   break; // It's inverted
-                    case OFF:   digitalWrite(WD_DISABLEPIN, HIGH);  break; // in hardware
+                    case ON:    digitalWrite(WDDISB_PIN, LOW);   break; // It's inverted
+                    case OFF:   digitalWrite(WDDISB_PIN, HIGH);  break; // in hardware
                 }
             }break;
             case GET_STATE: get_wd_dis_pin_state(); break;
@@ -42,6 +42,6 @@ void get_wd_dis_pin_state()
 {
     wd_dis_pin_mailbox.to_id = wd_dis_pin_mailbox.from_id;
     wd_dis_pin_mailbox.outbox_msg_size = WDDIS_PIN_OUTBOX_SIZE;
-    wd_dis_pin_mailbox.outbox[DATA_BYTE_OUT] = !digitalRead(WD_DISABLEPIN); // Inverted in hardware
+    wd_dis_pin_mailbox.outbox[DATA_BYTE_OUT] = !digitalRead(WDDISB_PIN); // Inverted in hardware
     wd_dis_pin_mailbox.outbox_status = PACKET_PRESENT;
 }

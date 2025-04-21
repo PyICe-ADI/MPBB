@@ -10,16 +10,18 @@
 // #define SCLPIN          21
 #define AUX_SDA         6
 #define AUX_SCL         7
-#define _buttonPin      23
-#define PGOODPIN        17
-#define FAULTBPIN       18
+// Inputs
+#define PUSHBUTTON_PIN  23
+#define PGOOD_PIN       17
+#define FAULTB_PIN      18
+#define MCUERR_PIN      5
+#define WDDISB_PIN      2
+// Outputs
 #define PGOOD_LED       19 // D5 PB02 GREEN
 #define FAULTB_LED      31 // D6 PB23 RED
 #define HEARTBEAT_LED   25 // D3 PB03 ORANGE
-#define WD_DISABLEPIN   2
-#define ENABLEPIN_b     8
-#define TESTHOOKPIN     41
-#define MCUERR_PIN      5
-#define TH_REMOTE       38
+#define ENABLEB_PIN     8
+#define TESTHOOK_PIN    41
+#define TH_REMOTE_PIN   38
 
 #endif

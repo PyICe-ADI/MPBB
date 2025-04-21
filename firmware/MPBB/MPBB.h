@@ -17,6 +17,7 @@
 #include "pgood_pin.h"
 #include "heartbeat.h"
 #include "wddis_pin.h"
+#include "faultb_pin.h"
 #include "pushbutton.h"
 #include "postoffice.h"
 #include "enable_pin.h"

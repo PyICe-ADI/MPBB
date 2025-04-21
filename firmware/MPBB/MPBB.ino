@@ -14,15 +14,16 @@ void setup()
     Wire.begin();
     SerialUSB.begin(115200);
     pinMode(HEARTBEAT_LED, OUTPUT);
-    pinMode(WD_DISABLEPIN, OUTPUT);
-    pinMode(ENABLEPIN_b, OUTPUT);
-    pinMode(TESTHOOKPIN, OUTPUT);
-    pinMode(PGOODPIN, INPUT);
+    pinMode(TESTHOOK_PIN, OUTPUT);
+    pinMode(ENABLEB_PIN, OUTPUT);
+    pinMode(WDDISB_PIN, OUTPUT);
+    pinMode(FAULTB_PIN, INPUT);
+    pinMode(PGOOD_PIN, INPUT);
     /**********************************************
     * Have D.U.T. default to off                  *
     ***********************************************/
-    digitalWrite(WD_DISABLEPIN, HIGH);
-    digitalWrite(ENABLEPIN_b, HIGH);
+    digitalWrite(WDDISB_PIN, HIGH);
+    digitalWrite(ENABLEB_PIN, HIGH);
 
     setup_softport();
 }
@@ -38,6 +39,7 @@ void loop() // Simple and fast round robin operating system
     process_mail();
     get_pgood_pin();
     service_smbus();
+    get_faultb_pin();
     get_push_button();
     eeprom_services();
     watchdog_services();

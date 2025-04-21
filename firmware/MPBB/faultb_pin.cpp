@@ -1,21 +1,21 @@
 /****************************************************************************
- * MPBB PGOOD Pin                                                           *
+ * MPBB FAULTB Pin                                                          *
  * Steve Martin                                                            	*
  * April 21, 2025                                                           *
  ****************************************************************************/
-#include "pgood_pin.h"
+#include "faultb_pin.h"
 
 /****************************************************************************
  * Get the RST pin state                                                    *
  ****************************************************************************/
-void get_pgood_pin()
+void get_faultb_pin()
 {
-    if (pgood_pin_mailbox.inbox_status == PACKET_PRESENT)
+    if (faultb_pin_mailbox.inbox_status == PACKET_PRESENT)
     {
-        pgood_pin_mailbox.to_id = pgood_pin_mailbox.from_id;
-        pgood_pin_mailbox.outbox[0] = digitalRead(PGOOD_PIN);
-        pgood_pin_mailbox.outbox_msg_size = PGOOD_PIN_OUTBOX_SIZE;
-        pgood_pin_mailbox.inbox_status = PACKET_ABSENT;
-        pgood_pin_mailbox.outbox_status = PACKET_PRESENT;
+        faultb_pin_mailbox.to_id = faultb_pin_mailbox.from_id;
+        faultb_pin_mailbox.outbox[0] = digitalRead(FAULTB_PIN);
+        faultb_pin_mailbox.outbox_msg_size = FAULTB_PIN_OUTBOX_SIZE;
+        faultb_pin_mailbox.inbox_status = PACKET_ABSENT;
+        faultb_pin_mailbox.outbox_status = PACKET_PRESENT;
     }
 }

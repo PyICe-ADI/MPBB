@@ -77,7 +77,7 @@ void watchdog_services()
         }
         watchdog_mailbox.inbox_status = PACKET_ABSENT;
     }
-    if (service_state && digitalRead(PGOODPIN)) // If PGOOD isn't high, don't bother.
+    if (service_state && digitalRead(PGOOD_PIN)) // If PGOOD isn't high, don't bother.
         service_watchdog();
     else
         last_service_time = micros();
