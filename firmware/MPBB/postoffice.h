@@ -6,9 +6,9 @@
 #ifndef POSTOFFICE_H
 #define POSTOFFICE_H
 
-#include "labcomm.h"                    // Gets incoming_packet and MAX_BUFFER_SIZE_MESSAGE_SIZE
-#include "idstring.h"              // Gets IDENTIFICATION string
-#include "smbus_comnd_struct.h"    // Gets start of SMBus register as proxy for command size.
+#include "labcomm.h"                // Gets incoming_packet and MAX_BUFFER_SIZE_MESSAGE_SIZE
+#include "idstring.h"               // Gets IDENTIFICATION string
+#include "smbus_comnd_struct.h"     // Gets start of SMBus register as proxy for command size.
 
 /****************************************************************************
  * Mail Box Addresses                                                       *
