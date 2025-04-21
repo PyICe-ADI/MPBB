@@ -7,7 +7,7 @@
 #define HEARTBEAT_H
 
 #include "board.h"
-#include <Arduino.h>  // For millis()
+#include <Arduino.h>  // For millis() and ?digitalWrite?
 
 void heartbeat();
 
