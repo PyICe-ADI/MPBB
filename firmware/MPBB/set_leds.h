@@ -6,6 +6,9 @@
 #ifndef LEDS_B
 #define LEDS_B
 
+#include "board.h"
+#include <Arduino.h>
+
 void set_leds();
 
 #endif

@@ -7,4 +7,5 @@
 
 void set_leds()
 {
+    digitalWrite(PGOOD_LED, digitalRead(PGOODPIN));
 }
