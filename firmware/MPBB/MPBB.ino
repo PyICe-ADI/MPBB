@@ -16,6 +16,7 @@ void setup()
     pinMode(HEARTBEAT_LED, OUTPUT);
     pinMode(TESTHOOK_PIN, OUTPUT);
     pinMode(ENABLEB_PIN, OUTPUT);
+    pinMode(MCUERRB_PIN, OUTPUT);
     pinMode(WDDISB_PIN, OUTPUT);
     pinMode(FAULTB_PIN, INPUT);
     pinMode(PGOOD_PIN, INPUT);
@@ -24,6 +25,7 @@ void setup()
     ***********************************************/
     digitalWrite(WDDISB_PIN, HIGH);
     digitalWrite(ENABLEB_PIN, HIGH);
+    digitalWrite(MCUERRB_PIN, HIGH);
 
     setup_softport();
 }
@@ -37,13 +39,14 @@ void loop() // Simple and fast round robin operating system
     set_leds();
     heartbeat();
     process_mail();
-    get_pgood_pin();
     service_smbus();
+    get_pgood_pin();
     get_faultb_pin();
     get_push_button();
     eeprom_services();
     watchdog_services();
-    set_wd_dis_pin_state();
-    set_enable_pin_state();
+    process_wddis_pin();
+    process_enable_pin();
+    process_mcuerr_pin();
     get_temperature_sensor();
 }

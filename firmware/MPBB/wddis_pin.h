@@ -9,7 +9,7 @@
 #include "postoffice.h"  // Gets Mailbox
 #include "board.h"
 
-void set_wd_dis_pin_state();
+void process_wddis_pin();
 void get_wd_dis_pin_state();
 
 #endif

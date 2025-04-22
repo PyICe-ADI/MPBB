@@ -1,9 +1,9 @@
 /****************************************************************************
- * MPBB WDDIS Pin                                                           *
+ * MCUERR Pin                                                               *
  * Steve Martin                                                            	*
  * April 21, 2025                                                           *
  ****************************************************************************/
-#include "wddis_pin.h"
+#include "mcuerr_pin.h"
 
 #define COMMAND_BYTE    0
 #define DATA_BYTE_OUT   0
@@ -16,32 +16,32 @@
 /****************************************************************************
  * Set the pin state                                                        *
  ****************************************************************************/
-void process_wddis_pin()
+void process_mcuerr_pin()
 {
-	if (wd_dis_pin_mailbox.inbox_status == PACKET_PRESENT)
-    {        
-        switch(wd_dis_pin_mailbox.inbox[COMMAND_BYTE])
+	if (mcuerr_pin_mailbox.inbox_status == PACKET_PRESENT)
+    {
+        switch(mcuerr_pin_mailbox.inbox[COMMAND_BYTE])
         {
             case SET_STATE:
             {
-                switch(wd_dis_pin_mailbox.inbox[DATA_BYTE_IN])
+                switch(mcuerr_pin_mailbox.inbox[DATA_BYTE_IN])
                 {
-                    case ON:    digitalWrite(WDDISB_PIN, LOW);  break; // It's inverted
-                    case OFF:   digitalWrite(WDDISB_PIN, HIGH); break; // in hardware
+                    case OFF:  digitalWrite(MCUERRB_PIN, LOW);  break; // It's inverted
+                    case ON:   digitalWrite(MCUERRB_PIN, HIGH); break; // in hardware
                 }
             }break;
-            case GET_STATE: get_wd_dis_pin_state(); break;
+            case GET_STATE: get_mcuerr_pin_state(); break;
         }
-        wd_dis_pin_mailbox.inbox_status = PACKET_ABSENT;
+        mcuerr_pin_mailbox.inbox_status = PACKET_ABSENT;
     }
 }
 /****************************************************************************
  * Get the pin state                                                        *
  ****************************************************************************/
-void get_wd_dis_pin_state()
+void get_mcuerr_pin_state()
 {
-    wd_dis_pin_mailbox.to_id = wd_dis_pin_mailbox.from_id;
-    wd_dis_pin_mailbox.outbox_msg_size = WDDIS_PIN_OUTBOX_SIZE;
-    wd_dis_pin_mailbox.outbox[DATA_BYTE_OUT] = !digitalRead(WDDISB_PIN); // Inverted in hardware
-    wd_dis_pin_mailbox.outbox_status = PACKET_PRESENT;
+    mcuerr_pin_mailbox.to_id = mcuerr_pin_mailbox.from_id;
+    mcuerr_pin_mailbox.outbox_msg_size = MCUERR_PIN_OUTBOX_SIZE;
+    mcuerr_pin_mailbox.outbox[DATA_BYTE_OUT] = digitalRead(MCUERRB_PIN); // Pin is inverted in hardware
+    mcuerr_pin_mailbox.outbox_status = PACKET_PRESENT;
 }

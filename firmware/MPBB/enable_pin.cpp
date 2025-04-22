@@ -28,7 +28,7 @@
 /****************************************************************************
  * Set the pin state                                                        *
  ****************************************************************************/
-void set_enable_pin_state()
+void process_enable_pin()
 {
 	if (enable_pin_mailbox.inbox_status == PACKET_PRESENT)
     {

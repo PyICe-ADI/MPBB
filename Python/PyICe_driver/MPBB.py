@@ -19,6 +19,7 @@ WATCHDOG_ADDRESS                = 7
 EEPROM_ADDRESS                  = 8
 TMP117_ADDRESS                  = 9
 FAULTB_PIN_ADDRESS              = 10
+MCUERR_PIN_ADDRESS              = 11
     
 EMPTY                           = ""
 SET_EN_CMD                      = "\x01"
@@ -30,6 +31,10 @@ SET_WDDIS_STATE                 = "\x01"
 WDDIS_ON                        = SET_WDDIS_STATE + "\x01"
 WDDIS_OFF                       = SET_WDDIS_STATE + "\x00"
 WDDIS_GET_STATE                 = "\x02"
+SET_MCUERR_STATE                = "\x01"
+MCUERR_ACTIVE                   = SET_MCUERR_STATE + "\x01"
+MCUERR_INACTIVE                 = SET_MCUERR_STATE + "\x00"
+MCUERR_GET_STATE                = "\x02"
 ###################################################
 # Watchdog Service Options                        #
 ###################################################
@@ -65,6 +70,7 @@ class MPBB(instrument):
         self.verbose = verbose
         interface_factory   = lab_interfaces.interface_factory()
         self.ENABLE_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=ENABLE_PIN_ADDRESS,  baudrate=115200, timeout=4)
+        self.MCUERR_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=MCUERR_PIN_ADDRESS,  baudrate=115200, timeout=4)
         self.PGOOD_port     = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=PGOOD_PIN_ADDRESS,   baudrate=115200, timeout=4)
         self.FAULTB_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=FAULTB_PIN_ADDRESS,  baudrate=115200, timeout=4)
         self.WDDIS_port     = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=WDDIS_PIN_ADDRESS,   baudrate=115200, timeout=4)
@@ -105,10 +111,11 @@ class MPBB(instrument):
 
     def add_all_channels(self):
         '''Helper function adds all available channels.'''
+        self.add_channel_wdpin(self._base_name + "_wddis")
         self.add_channel_pgoodpin(self._base_name + "_pgood")
-        self.add_channel_wdpin(self._base_name + "_wddis_pin")
         self.add_channel_faultbpin(self._base_name + "_faultb")
         self.add_channel_enablepin(self._base_name + "_enable")
+        self.add_channel_mcuerrpin(self._base_name + "_mcuerr")
         self.add_channel_identify(self._base_name + "_board_id")
         self.add_channel_TMP117(self._base_name + "_temp_sensor")
         self.add_channel_scratchpad(self._base_name + "_scratchpad")
@@ -133,7 +140,7 @@ class MPBB(instrument):
             elif value in [2, "HOOK"]:
                 payload = TARGET_HOOK
             else:
-                raise ValueError((f'\n\nMPBB: Sorry don\'t know how to set Target\'s Enable pin to "{value}".'))
+                raise ValueError((f'\n\nMPBB: Sorry don\'t know how to set Target\'s ENABLE pin to "{value}".'))
             if payload != None:
                 self._send_payload(port=self.ENABLE_port, payload=payload)
         def _get_enable_pin():
@@ -146,20 +153,40 @@ class MPBB(instrument):
         self.enablepin_channel._read = _get_enable_pin
         return self._add_channel(self.enablepin_channel)
         
+    def add_channel_mcuerrpin(self, channel_name):
+        def _set_mcuerr_pin(value):
+            payload = None
+            if value in [1, True, "ACTIVE"]:
+                payload = MCUERR_ACTIVE
+            elif value in [0, False, "INACTIVE"]:
+                payload = MCUERR_INACTIVE
+            else:
+                raise ValueError((f'\n\nMPBB: Sorry don\'t know how to set Target\'s MCUERR pin to "{value}".'))
+            if payload != None:
+                self._send_payload(port=self.MCUERR_port, payload=payload)
+        def _get_mcuerr_pin():
+            self._send_payload(port=self.MCUERR_port, payload=MCUERR_GET_STATE)
+            return self._get_payload(port=self.MCUERR_port, datatype="integer")
+        self.mcuerrpin_channel = channel(channel_name, write_function=lambda value: _set_mcuerr_pin(value))
+        self.mcuerrpin_channel.add_preset("ACTIVE", "Activate MCUERR (Pull Down)")
+        self.mcuerrpin_channel.add_preset("INACTIVE", "Deactivate MCUERR (Release up)")
+        self.mcuerrpin_channel._read = _get_mcuerr_pin
+        return self._add_channel(self.mcuerrpin_channel)
+
     def add_channel_pgoodpin(self, channel_name):
         def _get_pgood_pin():
             self._send_payload(port=self.PGOOD_port, payload=EMPTY)
             return self._get_payload(port=self.PGOOD_port, datatype="integer")
         new_channel = channel(channel_name, read_function=_get_pgood_pin)
         return self._add_channel(new_channel)
-        
+
     def add_channel_faultbpin(self, channel_name):
         def _get_faultb_pin():
             self._send_payload(port=self.FAULTB_port, payload=EMPTY)
             return self._get_payload(port=self.FAULTB_port, datatype="integer")
         new_channel = channel(channel_name, read_function=_get_faultb_pin)
         return self._add_channel(new_channel)
-        
+
     def add_channel_wdpin(self, channel_name):
         def _set_wddis_pin(set_hi):
             self._send_payload(port=self.WDDIS_port, payload=WDDIS_ON if set_hi else WDDIS_OFF)
