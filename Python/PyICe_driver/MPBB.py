@@ -20,6 +20,7 @@ EEPROM_ADDRESS                  = 8
 TMP117_ADDRESS                  = 9
 FAULTB_PIN_ADDRESS              = 10
 MCUERR_PIN_ADDRESS              = 11
+REM_ATH_PIN_ADDRESS             = 12
     
 EMPTY                           = ""
 SET_EN_CMD                      = "\x01"
@@ -35,6 +36,10 @@ SET_MCUERR_STATE                = "\x01"
 MCUERR_ACTIVE                   = SET_MCUERR_STATE + "\x01"
 MCUERR_INACTIVE                 = SET_MCUERR_STATE + "\x00"
 MCUERR_GET_STATE                = "\x02"
+SET_REM_ATH_STATE               = "\x01"
+REM_ATH_ON                      = SET_REM_ATH_STATE + "\x01"
+REM_ATH_OFF                     = SET_REM_ATH_STATE + "\x00"
+REM_ATH_GET_STATE               = "\x02"
 ###################################################
 # Watchdog Service Options                        #
 ###################################################
@@ -74,6 +79,7 @@ class MPBB(instrument):
         self.PGOOD_port     = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=PGOOD_PIN_ADDRESS,   baudrate=115200, timeout=4)
         self.FAULTB_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=FAULTB_PIN_ADDRESS,  baudrate=115200, timeout=4)
         self.WDDIS_port     = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=WDDIS_PIN_ADDRESS,   baudrate=115200, timeout=4)
+        self.REM_ATH_port   = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=REM_ATH_PIN_ADDRESS, baudrate=115200, timeout=4)
         self.IDENT_port     = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=IDENTIFY_ADDRESS,    baudrate=115200, timeout=4)
         self.WATCHDOG_port  = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=WATCHDOG_ADDRESS,    baudrate=115200, timeout=4)
         self.TMP117_port    = interface_factory.get_labcomm_twi_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=TMP117_ADDRESS,      baudrate=115200, timeout=4)
@@ -119,6 +125,7 @@ class MPBB(instrument):
         self.add_channel_identify(self._base_name + "_board_id")
         self.add_channel_TMP117(self._base_name + "_temp_sensor")
         self.add_channel_scratchpad(self._base_name + "_scratchpad")
+        self.add_channel_remote_ath(self._base_name + "_remote_ath")
         self.add_channel_wd_use_pec(self._base_name + "_wd_use_pec")
         self.add_channel_wd_enable(self._base_name + "_wd_svc_enable")
         self.add_channel_wd_method(self._base_name + "_wd_svc_method")
@@ -172,6 +179,26 @@ class MPBB(instrument):
         self.mcuerrpin_channel.add_preset("INACTIVE", "Deactivate MCUERR (Release up)")
         self.mcuerrpin_channel._read = _get_mcuerr_pin
         return self._add_channel(self.mcuerrpin_channel)
+
+    def add_channel_remote_ath(self, channel_name):
+        def _set_rem_ath_pin(value):
+            payload = None
+            if value in [1, True, "ON"]:
+                payload = REM_ATH_ON
+            elif value in [0, False, "OFF"]:
+                payload = REM_ATH_OFF
+            else:
+                raise ValueError((f'\n\nMPBB: Sorry don\'t know how to set the Remote ATH pin to "{value}".'))
+            if payload != None:
+                self._send_payload(port=self.REM_ATH_port, payload=payload)
+        def _get_rem_ath_pin():
+            self._send_payload(port=self.REM_ATH_port, payload=REM_ATH_GET_STATE)
+            return self._get_payload(port=self.REM_ATH_port, datatype="integer")
+        self.rem_ath_pin_channel = channel(channel_name, write_function=lambda value: _set_rem_ath_pin(value))
+        self.rem_ath_pin_channel.add_preset("ON", "Activate the Remote (MAX20403) Morpheus Test Hook")
+        self.rem_ath_pin_channel.add_preset("OFF", "Deactivate the Remote (MAX20403) Morpheus Test Hook")
+        self.rem_ath_pin_channel._read = _get_rem_ath_pin
+        return self._add_channel(self.rem_ath_pin_channel)
 
     def add_channel_pgoodpin(self, channel_name):
         def _get_pgood_pin():
@@ -277,7 +304,6 @@ class MPBB(instrument):
             return self._get_payload(port=self.WATCHDOG_port, datatype="integer")
         self.wd_set_wd_target_addr7 = channel(channel_name, write_function=lambda address: _set_wd_target_addr7(address))
         self.wd_set_wd_target_addr7._read = _get_wd_target_addr7
-        self.wd_set_wd_target_addr7.set_display_format_str(fmt_str=":x")
         return self._add_channel(self.wd_set_wd_target_addr7)
 
     def add_channel_wd_crc_polynomial(self, channel_name):
