@@ -19,6 +19,8 @@ void setup()
     pinMode(ENABLEB_PIN, OUTPUT);
     pinMode(MCUERRB_PIN, OUTPUT);
     pinMode(WDDISB_PIN, OUTPUT);
+    pinMode(FAULTB_LED, OUTPUT);
+    pinMode(PGOOD_LED, OUTPUT);
     pinMode(FAULTB_PIN, INPUT);
     pinMode(PGOOD_PIN, INPUT);
     /**********************************************
