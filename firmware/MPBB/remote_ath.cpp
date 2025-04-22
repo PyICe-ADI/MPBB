@@ -1,9 +1,9 @@
 /****************************************************************************
- * MCUERR Pin                                                               *
+ * Remote ATH Control Pin                                                   *
  * Steve Martin                                                            	*
  * April 21, 2025                                                           *
  ****************************************************************************/
-#include "mcuerr_pin.h"
+#include "remote_ath.h"
 
 #define COMMAND_BYTE    0
 #define DATA_BYTE_OUT   0
@@ -16,32 +16,32 @@
 /****************************************************************************
  * Set the pin state                                                        *
  ****************************************************************************/
-void process_mcuerr_pin()
+void process_remote_ath_pin()
 {
-	if (mcuerr_pin_mailbox.inbox_status == PACKET_PRESENT)
+	if (rem_ath_pin_mailbox.inbox_status == PACKET_PRESENT)
     {
-        switch(mcuerr_pin_mailbox.inbox[COMMAND_BYTE])
+        switch(rem_ath_pin_mailbox.inbox[COMMAND_BYTE])
         {
             case SET_STATE:
             {
-                switch(mcuerr_pin_mailbox.inbox[DATA_BYTE_IN])
+                switch(rem_ath_pin_mailbox.inbox[DATA_BYTE_IN])
                 {
-                    case OFF:  digitalWrite(MCUERRB_PIN, LOW);  break;
-                    case ON:   digitalWrite(MCUERRB_PIN, HIGH); break;
+                    case OFF:  digitalWrite(REMOTE_ATH_PIN, LOW);  break; 
+                    case ON:   digitalWrite(REMOTE_ATH_PIN, HIGH); break; 
                 }
             }break;
-            case GET_STATE: get_mcuerr_pin_state(); break;
+            case GET_STATE: get_remote_ath_pin_state(); break;
         }
-        mcuerr_pin_mailbox.inbox_status = PACKET_ABSENT;
+        rem_ath_pin_mailbox.inbox_status = PACKET_ABSENT;
     }
 }
 /****************************************************************************
  * Get the pin state                                                        *
  ****************************************************************************/
-void get_mcuerr_pin_state()
+void get_remote_ath_pin_state()
 {
-    mcuerr_pin_mailbox.to_id = mcuerr_pin_mailbox.from_id;
-    mcuerr_pin_mailbox.outbox_msg_size = MCUERR_PIN_OUTBOX_SIZE;
-    mcuerr_pin_mailbox.outbox[DATA_BYTE_OUT] = digitalRead(MCUERRB_PIN);
-    mcuerr_pin_mailbox.outbox_status = PACKET_PRESENT;
+    rem_ath_pin_mailbox.to_id = rem_ath_pin_mailbox.from_id;
+    rem_ath_pin_mailbox.outbox_msg_size = REM_ATH_PIN_OUTBOX_SIZE;
+    rem_ath_pin_mailbox.outbox[DATA_BYTE_OUT] = digitalRead(REMOTE_ATH_PIN);
+    rem_ath_pin_mailbox.outbox_status = PACKET_PRESENT;
 }

@@ -22,6 +22,7 @@
 #include "postoffice.h"
 #include "enable_pin.h"
 #include "mcuerr_pin.h"
+#include "remote_ath.h"
 #include "temp_sensor.h"
 #include "smbus_services.h"
 

@@ -24,6 +24,6 @@
 #define MCUERRB_PIN     5
 #define WDDISB_PIN      2
 #define TESTHOOK_PIN    41
-#define TH_REMOTE_PIN   38
+#define REMOTE_ATH_PIN  38
 
 #endif

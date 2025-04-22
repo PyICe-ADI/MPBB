@@ -13,6 +13,7 @@ void setup()
     // TwoWire aux_i2C(&sercom1, 11, 13); // started adding second I2C port
     Wire.begin();
     SerialUSB.begin(115200);
+    pinMode(REMOTE_ATH_PIN, OUTPUT);
     pinMode(HEARTBEAT_LED, OUTPUT);
     pinMode(TESTHOOK_PIN, OUTPUT);
     pinMode(ENABLEB_PIN, OUTPUT);
@@ -26,6 +27,7 @@ void setup()
     digitalWrite(WDDISB_PIN, HIGH);
     digitalWrite(ENABLEB_PIN, HIGH);
     digitalWrite(MCUERRB_PIN, HIGH);
+    digitalWrite(REMOTE_ATH_PIN, LOW);
 
     setup_softport();
 }
@@ -48,5 +50,6 @@ void loop() // Simple and fast round robin operating system
     process_wddis_pin();
     process_enable_pin();
     process_mcuerr_pin();
+    process_remote_ath_pin();
     get_temperature_sensor();
 }

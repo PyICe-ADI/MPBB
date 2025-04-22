@@ -24,6 +24,7 @@
 #define TMP117_ADDRESS              9
 #define FAULTB_PIN_ADDRESS          10
 #define MCUERR_PIN_ADDRESS          11
+#define REM_ATH_PIN_ADDRESS         12
 
 /****************************************************************************
  * Mail Box Sizes                                                           *
@@ -46,6 +47,9 @@
 #define MCUERR_PIN_INBOX_SIZE       2
 #define MCUERR_PIN_OUTBOX_SIZE      1
 
+#define REM_ATH_PIN_INBOX_SIZE      2
+#define REM_ATH_PIN_OUTBOX_SIZE     1
+
 #define PGOOD_PIN_INBOX_SIZE        0
 #define PGOOD_PIN_OUTBOX_SIZE       1
 
@@ -66,11 +70,12 @@
  ****************************************************************************/
 extern Mailbox<ID_INBOX_SIZE,           ID_OUTBOX_SIZE>             identify_mailbox;
 extern Mailbox<SMBUS_INBOX_SIZE,        SMBUS_OUTBOX_SIZE>          smbus_services_mailbox;
+extern Mailbox<REM_ATH_PIN_INBOX_SIZE,  REM_ATH_PIN_OUTBOX_SIZE>    rem_ath_pin_mailbox;
 extern Mailbox<WDDIS_PIN_INBOX_SIZE,    WDDIS_PIN_OUTBOX_SIZE>      wd_dis_pin_mailbox;
 extern Mailbox<ENABLE_PIN_INBOX_SIZE,   ENABLE_PIN_OUTBOX_SIZE>     enable_pin_mailbox;
 extern Mailbox<MCUERR_PIN_INBOX_SIZE,   MCUERR_PIN_OUTBOX_SIZE>     mcuerr_pin_mailbox;
-extern Mailbox<PGOOD_PIN_INBOX_SIZE,    PGOOD_PIN_OUTBOX_SIZE>      pgood_pin_mailbox;
 extern Mailbox<FAULTB_PIN_INBOX_SIZE,   FAULTB_PIN_OUTBOX_SIZE>     faultb_pin_mailbox;
+extern Mailbox<PGOOD_PIN_INBOX_SIZE,    PGOOD_PIN_OUTBOX_SIZE>      pgood_pin_mailbox;
 extern Mailbox<WATCHDOG_INBOX_SIZE,     WATCHDOG_OUTBOX_SIZE>       watchdog_mailbox;
 extern Mailbox<EEPROM_INBOX_SIZE,       EEPROM_OUTBOX_SIZE>         eeprom_mailbox;
 extern Mailbox<TMP117_INBOX_SIZE,       TMP117_OUTBOX_SIZE>         tmp117_mailbox;
