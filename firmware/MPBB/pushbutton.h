@@ -3,8 +3,8 @@
  * Steve Martin                                                             *
  * April 21, 2025                                                           *
  ****************************************************************************/
-#ifndef _PUSHBUTTON_B
-#define _PUSHBUTTON_B
+#ifndef PUSHBUTTON_H
+#define PUSHBUTTON_H
 
 void get_push_button();
 

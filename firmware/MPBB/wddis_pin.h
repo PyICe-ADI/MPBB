@@ -1,10 +1,10 @@
 /****************************************************************************
- * WD_DISABLE Pin                                                           *
+ * WDDIS Pin                                                                *
  * Steve Martin                                                             *
  * April 21, 205                                                            *
  ****************************************************************************/
-#ifndef WDDIS_PIN_B
-#define WDDIS_PIN_B
+#ifndef WDDIS_PIN_H
+#define WDDIS_PIN_H
 
 #include "postoffice.h"  // Gets Mailbox
 #include "board.h"

@@ -3,8 +3,8 @@
  * Steve Martin                                                             *
  * April 21, 2025                                                           *
  ****************************************************************************/
-#ifndef SOFTPORT_B
-#define SOFTPORT_B
+#ifndef SOFTPORT_H
+#define SOFTPORT_H
 
 #include <SoftWire.h>
 #include "board.h"

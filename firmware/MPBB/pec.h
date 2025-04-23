@@ -4,8 +4,8 @@
  * April 21, 2025                                                           *
  ****************************************************************************/
 
-#ifndef PEC_H_
-#define PEC_H_
+#ifndef PEC_H
+#define PEC_H
 
 #include <stdint.h>
 #include <avr/pgmspace.h> // For PEC table storage
