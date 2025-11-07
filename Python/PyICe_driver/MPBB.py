@@ -173,7 +173,13 @@ class MPBB(instrument):
                 self._send_payload(port=self.MCUERR_port, payload=payload)
         def _get_mcuerr_pin():
             self._send_payload(port=self.MCUERR_port, payload=MCUERR_GET_STATE)
-            return self._get_payload(port=self.MCUERR_port, datatype="integer")
+            int_value = self._get_payload(port=self.MCUERR_port, datatype="integer")
+            if int_value == 0:
+                return "INACTIVE"
+            elif int_value == 1:
+                return "ACTIVE"
+            else:
+                raise Exception (f'unexpected value = {int_value}')
         self.mcuerrpin_channel = channel(channel_name, write_function=lambda value: _set_mcuerr_pin(value))
         self.mcuerrpin_channel.add_preset("ACTIVE", "Activate MCUERR (Pull Down)")
         self.mcuerrpin_channel.add_preset("INACTIVE", "Deactivate MCUERR (Release up)")

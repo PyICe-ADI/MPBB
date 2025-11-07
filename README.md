@@ -5,6 +5,6 @@ MPBB is a demonstration board for the High Frequency 4 Channel Radar PMIC develo
 
 Requires the following libraries:
    Softwire (includes asycndelay) (Steve Marple)
-   FlashstorageSAMD (Christian Maglie)
+   FlashStorage_SAMD (Christian Maglie)
    
-Target board is the Arduino Native USB in Arduino SAMD boards manager
+Target board is the Arduino Zero (Native USB Port) in Arduino SAMD board manager

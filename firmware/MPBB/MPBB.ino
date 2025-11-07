@@ -28,7 +28,7 @@ void setup()
     ***********************************************/
     digitalWrite(WDDISB_PIN, HIGH);
     digitalWrite(ENABLEB_PIN, HIGH);
-    digitalWrite(MCUERRB_PIN, HIGH);
+    digitalWrite(MCUERRB_PIN, LOW);
     digitalWrite(REMOTE_ATH_PIN, LOW);
 
     setup_softport();
