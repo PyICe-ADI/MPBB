@@ -65,6 +65,7 @@ WD_SERVICE_METHOD_ALGORITHMIC   = 1 # Enums for Watchdog
 IDENT_WRITE_SCRATCHPAD          = "\x01"
 IDENT_READ_SCRATCHPAD           = "\x02"
 IDENT_GET_SERIALNUM             = "\x03"
+IDENT_MAX_QUIET                 = "\x04"
 
 class MPBB(instrument):
     ''' Stowe Demo Board, a base board that accepts the Stowe bench evaluation target board but can be given to customers.
@@ -132,6 +133,7 @@ class MPBB(instrument):
         self.add_channel_EEPROM(self._base_name + "_targetboard_serialnum")
         self.add_channel_wd_response_time(self._base_name + "_wd_svc_time")
         self.add_channel_serialnum(self._base_name + "_baseboard_serialnum")
+        self.add_channel_maxquiet(self._base_name + "_max_quiet")
         self.add_channel_wd_answer_addr(self._base_name + "_wd_answer_addr")
         self.add_channel_wd_target_addr7(self._base_name + "_wd_target_addr7")
         self.add_channel_wd_question_addr(self._base_name + "_wd_question_addr")
@@ -253,6 +255,13 @@ class MPBB(instrument):
             return str(hex(self._get_payload(self.IDENT_port, datatype="integer")))
         new_channel = channel(channel_name, read_function=_get_serial_number)
         new_channel._read = _get_serial_number
+        return self._add_channel(new_channel)
+
+    def add_channel_maxquiet(self, channel_name):
+        def _req_max_quiet():
+            self._send_payload(port=self.IDENT_port, payload=IDENT_MAX_QUIET)
+            return 
+        new_channel = channel(channel_name, write_function=_req_max_quiet)
         return self._add_channel(new_channel)
 
     def add_channel_wd_response_time(self, channel_name):
