@@ -44,7 +44,7 @@ void identify()
             case WRITE_SCRATCHPAD:  write_scratchpad(); break;
             case READ_SCRATCHPAD:   read_scratchpad();  break;
             case GET_SERNUM:        get_serialnum();    break;
-            case MAX_QUIET:         stop_clocks();    break;
+            case MAX_QUIET:         max_quiet();         break;
         }
         identify_mailbox.inbox_status = PACKET_ABSENT;
     }
@@ -131,7 +131,7 @@ void get_serialnum()
     // identify_mailbox.outbox_status = PACKET_PRESENT;
 // }
 
-void stop_clocks() {
+void max_quiet() {
     SYSCTRL->XOSC32K.reg &= ~SYSCTRL_XOSC32K_RUNSTDBY;
     SYSCTRL->OSC32K.reg &= ~SYSCTRL_OSC32K_RUNSTDBY;
     SYSCTRL->OSC8M.reg &= ~SYSCTRL_OSC8M_RUNSTDBY;

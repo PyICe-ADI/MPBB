@@ -14,5 +14,7 @@ void send_identity();
 void write_scratchpad();
 void read_scratchpad();
 void get_serialnum();
+void max_quiet();
+
 
 #endif
