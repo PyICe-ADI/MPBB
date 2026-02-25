@@ -67,13 +67,14 @@ IDENT_READ_SCRATCHPAD           = "\x02"
 IDENT_GET_SERIALNUM             = "\x03"
 
 class MPBB(instrument):
-    ''' Stowe Demo Board, a base board that accepts the Stowe bench evaluation target board but can be given to customers.
+    ''' Morpheus Portable Base Board, a base board that accepts the Morpheus bench evaluation target board but can be given to customers.
         Has PyICe as a depdendency.'''
-    def __init__(self, channel_master, comport, verbose=False):
+    def __init__(self, comport, verbose=False, interface_factory=None, channel_master=None):
         self._base_name = 'MPBB'
         instrument.__init__(self, f"{self._base_name}")
         self.verbose = verbose
-        interface_factory   = lab_interfaces.interface_factory()
+        if interface_factory is None:
+            interface_factory   = lab_interfaces.interface_factory()
         self.ENABLE_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=ENABLE_PIN_ADDRESS,  baudrate=115200, timeout=4)
         self.MCUERR_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=MCUERR_PIN_ADDRESS,  baudrate=115200, timeout=4)
         self.PGOOD_port     = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=PGOOD_PIN_ADDRESS,   baudrate=115200, timeout=4)
@@ -87,18 +88,26 @@ class MPBB(instrument):
         self.TARGET_port    = interface_factory.get_labcomm_twi_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=SMBUS_SVC_ADDRESS,   baudrate=115200, timeout=4)
         self.TMP117         = TMP117(interface_twi=self.TMP117_port, addr7=0x49)
         self.EEPROM         = BR24H64(interface_twi=self.EEPROM_port, addr7=0x50)
-        i2c_target          = get_i2c_target(twi_port=self.TARGET_port, addr7=MORPHEUS_ADDR7)
+        self.i2c_target     = get_i2c_target(twi_port=self.TARGET_port, addr7=MORPHEUS_ADDR7)
         self.add_all_channels()
-        channel_master.add(i2c_target)
-        channel_master.add(self.TMP117)
-        channel_master.add(self.EEPROM)
+        if channel_master is not None:
+            channel_master.add(self.i2c_target)
+            channel_master.add(self.TMP117)
+            channel_master.add(self.EEPROM)
         self.reset_board()
 
     def __del__(self):
         '''Close interface (serial) ports on exit???'''
         # self.ENABLE_port.close()
         pass
-        
+
+    def get_TMP117(self):
+        return self.TMP117
+    def get_EEPROM(self):
+        return self.EEPROM
+    def get_mpbb_i2c_target(self):
+        return self.i2c_target
+
     def _send_payload(self, port, payload):
         if self.verbose:
             print(f"Sending payload: {payload.encode('latin1')}")
