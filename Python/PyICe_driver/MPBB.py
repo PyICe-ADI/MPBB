@@ -67,13 +67,13 @@ IDENT_READ_SCRATCHPAD           = "\x02"
 IDENT_GET_SERIALNUM             = "\x03"
 
 class MPBB(instrument):
-    ''' Stowe Demo Board, a base board that accepts the Stowe bench evaluation target board but can be given to customers.
+    ''' Morpheus Portable Base Board, a base board that accepts the Morpheus bench evaluation target board but can be given to customers.
         Has PyICe as a depdendency.'''
     def __init__(self, comport, verbose=False, interface_factory=None, channel_master=None):
         self._base_name = 'MPBB'
         instrument.__init__(self, f"{self._base_name}")
         self.verbose = verbose
-        if interface_factory == None:
+        if interface_factory is None:
             interface_factory   = lab_interfaces.interface_factory()
         self.ENABLE_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=ENABLE_PIN_ADDRESS,  baudrate=115200, timeout=4)
         self.MCUERR_port    = interface_factory.get_labcomm_raw_interface(comport_name=comport, src_id=PYICE_GUI_ADDRESS, dest_id=MCUERR_PIN_ADDRESS,  baudrate=115200, timeout=4)
@@ -90,7 +90,7 @@ class MPBB(instrument):
         self.EEPROM         = BR24H64(interface_twi=self.EEPROM_port, addr7=0x50)
         self.i2c_target     = get_i2c_target(twi_port=self.TARGET_port, addr7=MORPHEUS_ADDR7)
         self.add_all_channels()
-        if channel_master != None:
+        if channel_master is not None:
             channel_master.add(self.i2c_target)
             channel_master.add(self.TMP117)
             channel_master.add(self.EEPROM)
