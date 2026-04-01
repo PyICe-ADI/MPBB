@@ -68,7 +68,7 @@ IDENT_GET_SERIALNUM             = "\x03"
 IDENT_MAX_QUIET                 = "\x04"
 
 class MPBB(instrument):
-    ''' Stowe Demo Board, a base board that accepts the Stowe bench evaluation target board but can be given to customers.
+    ''' Morpheus Demo Board, a base board that accepts the Morpheus bench evaluation target board but can be given to customers.
         Has PyICe as a depdendency.'''
     def __init__(self, channel_master, comport, verbose=False):
         self._base_name = 'MPBB'
