@@ -1,6 +1,6 @@
 # INTRODUCTION
 
-The MPBB demonstration board provides a hardware platform and firmware for interacting with the 5-channel automotive PMIC Morpheus in a way that is substantially similar, and largely compatible, with ADI's internal bench evaluation system. It is a baseboard, or motherboard, that receives a target board for the Morpheus PMIC IC (aka LT3390 / LT3390-3 / LT3390-5 /...). A target board for each supported variant of Morpheus is available from ADI. For custom applications of Morpheus, please contact your ADI sales or applications representative.
+The MPBB demonstration board provides a hardware platform and firmware for interacting with the 4-channel automotive PMIC Morpheus in a way that is substantially similar, and largely compatible, with ADI's internal bench evaluation system. It is a baseboard, or motherboard, that receives a target board for the Morpheus PMIC IC. A target board for each supported variant of Morpheus is available from ADI. For custom applications of Morpheus, please contact your ADI sales or applications representative.
 
 The MPBB also provides the services needed to interact with other target-board resources such as a precision temperature sensor and an EEPROM for electronically identifying the target-board.
 
