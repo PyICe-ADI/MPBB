@@ -4,6 +4,7 @@
  * April 21, 2025                                                           *
  ****************************************************************************/
 #include "identify.h"
+#include "board.h"
 #include <FlashStorage_SAMD.h>
 
 // #include <FlashStorage_SAMD.h> shouldn't be in here.
@@ -132,11 +133,43 @@ void get_serialnum()
 // }
 
 void max_quiet() {
+    SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk;
+
+    USBDevice.detach();
+    USB->DEVICE.CTRLA.bit.ENABLE = 0;
+
+    digitalWrite(HEARTBEAT_LED, LOW);
+    digitalWrite(PGOOD_LED, LOW);
+    digitalWrite(FAULTB_LED, LOW);
+    pinMode(ENABLEB_PIN, INPUT);
+    pinMode(MCUERRB_PIN, INPUT);
+    pinMode(WDDISB_PIN, INPUT);
+    pinMode(TESTHOOK_PIN, INPUT);
+    pinMode(REMOTE_ATH_PIN, INPUT);
+
+    for (uint8_t i = 0; i < 8; i++) {
+        GCLK->GENCTRL.reg = GCLK_GENCTRL_ID(i);
+        while (GCLK->STATUS.bit.SYNCBUSY);
+        uint32_t genctrl = GCLK->GENCTRL.reg;
+        genctrl &= ~GCLK_GENCTRL_RUNSTDBY;
+        genctrl |= GCLK_GENCTRL_ID(i);
+        GCLK->GENCTRL.reg = genctrl;
+        while (GCLK->STATUS.bit.SYNCBUSY);
+    }
+
+    SYSCTRL->DFLLCTRL.reg &= ~SYSCTRL_DFLLCTRL_RUNSTDBY;
+    while (!SYSCTRL->PCLKSR.bit.DFLLRDY);
+    SYSCTRL->DPLLCTRLA.reg &= ~SYSCTRL_DPLLCTRLA_RUNSTDBY;
     SYSCTRL->XOSC32K.reg &= ~SYSCTRL_XOSC32K_RUNSTDBY;
     SYSCTRL->OSC32K.reg &= ~SYSCTRL_OSC32K_RUNSTDBY;
     SYSCTRL->OSC8M.reg &= ~SYSCTRL_OSC8M_RUNSTDBY;
     SYSCTRL->XOSC.reg &= ~SYSCTRL_XOSC_RUNSTDBY;
-	SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-	__DSB();
-	__WFI();
+    SYSCTRL->BOD33.reg &= ~SYSCTRL_BOD33_RUNSTDBY;
+    SYSCTRL->VREG.reg |= SYSCTRL_VREG_RUNSTDBY;
+
+    EIC->WAKEUP.reg = 0;
+
+    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+    __DSB();
+    __WFI();
 }
