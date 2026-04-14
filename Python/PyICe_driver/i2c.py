@@ -33,7 +33,7 @@ def get_i2c_target(twi_port, addr7):
                                        read_function  = lambda msByteCh=msByteCh, lsByteCh=lsByteCh: dac_read(msByteCh, lsByteCh),
                                        write_function = lambda code, msByteCh=msByteCh, lsByteCh=lsByteCh, strobeCh=twi_inst_inst['tm_dacs']: dac_update(code, msByteCh, lsByteCh, strobeCh)
                                       )
-            new_ch.set_category('stowe_dac_wrapper')
+            new_ch.set_category('morpheus_dac_wrapper')
             # new_ch.set_attribute("default", (msByteCh.get_attribute('default') << 8) | lsByteCh.get_attribute('default'))         ### Does not have a default setting
             vbg = 1.209
             new_ch.add_format(format_name = 'dac_scale',

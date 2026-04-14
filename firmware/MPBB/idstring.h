@@ -13,4 +13,4 @@ const PROGMEM char IDENTIFICATION[] = "MPBB Morpheus Demo Board REV: 0.0";
 #define ID_STRING_MESSAGE_SIZE  sizeof(IDENTIFICATION) - 1 // Omit the string's null character
 #define IDENTIFY_PAYLOAD_SIZE   (SCRATCHPAD_SIZE >= ID_STRING_MESSAGE_SIZE) ? SCRATCHPAD_SIZE : ID_STRING_MESSAGE_SIZE
 
-#endif 
+#endif

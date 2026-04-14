@@ -14,7 +14,7 @@ uint8_t crc8(uint8_t data, uint8_t crc)
   crc = crc ^ data;
   for (i = 0; i < 8; i++)
   {
-    if (crc & 0x80) crc = (crc << 1) ^  0x07;
+    if (crc & 0x80) crc = (crc << 1) ^ 0x07;
     else crc = crc << 1;
   }
   return crc;

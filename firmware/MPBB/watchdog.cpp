@@ -5,7 +5,7 @@
  ****************************************************************************/
 #include "watchdog.h"
 
-static uint32_t         WD_response_time_us = 48000;    // 48ms, LT3390: √(min * max) = √(16ms * 144ms)
+static uint32_t         WD_response_time_us = 48000;    // 48ms, LT3398: √(min * max) = √(16ms * 144ms)
 static uint8_t          watchdog_service_method = 0;
 static uint8_t          crc_poly = 0b00000111;          // X^8 implied
 static bool             service_state = false;
@@ -90,7 +90,7 @@ void set_response_time_us()
     WD_response_time_us =   watchdog_mailbox.inbox[START_OF_DATA_IN_BYTE + 0] << 24 |
                             watchdog_mailbox.inbox[START_OF_DATA_IN_BYTE + 1] << 16 |
                             watchdog_mailbox.inbox[START_OF_DATA_IN_BYTE + 2] << 8  |
-                            watchdog_mailbox.inbox[START_OF_DATA_IN_BYTE + 3];       
+                            watchdog_mailbox.inbox[START_OF_DATA_IN_BYTE + 3];
 }
 /****************************************************************************
  * Get the Watchdog Resonse time in µs. Expects a 4 byte 32 bit value       *
@@ -238,18 +238,16 @@ uint8_t compute_watchdog_answer(uint8_t question)
  ****************************************************************************/
 void service_watchdog()
 {
-    uint8_t response;
-    SMBUS_reply reply={.status=0, .lo_byte=0, .hi_byte=0};
-
     if (micros() - last_service_time >= WD_response_time_us)
     {
-        reply = read_register(SMBUS_addr7, question_addr, use_pec, BYTE_SIZE);
+        uint8_t response = 0;
+        SMBUS_reply reply = read_register(SMBUS_addr7, question_addr, use_pec, BYTE_SIZE);
         if (watchdog_service_method == USE_LOOKUP_TABLE)
             response = WD_response_table[reply.lo_byte];
         else if (watchdog_service_method == USE_ALGORITHMIC)
             response = compute_watchdog_answer(reply.lo_byte);
         else; // Shouldn't happen
-        reply = write_register(SMBUS_addr7, answer_addr, use_pec, BYTE_SIZE, response, 0);
+        (void)write_register(SMBUS_addr7, answer_addr, use_pec, BYTE_SIZE, response, 0);
         last_service_time = micros();
     }
 }

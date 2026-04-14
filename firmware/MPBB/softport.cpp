@@ -6,7 +6,7 @@
 //  https://www.arduino.cc/reference/en/libraries/softwire/
 //  https://github.com/stevemarple/SoftWire/blob/master/examples/SoftWire_MLX90614/SoftWire_MLX90614.ino
 //  https://github.com/stevemarple/SoftWire/blob/master/examples/ReadDS1307/ReadDS1307.ino
- 
+
 #include "softport.h"
 
 SoftWire softport(AUX_SDA, AUX_SCL);

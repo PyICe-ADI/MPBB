@@ -19,7 +19,7 @@
 void process_wddis_pin()
 {
 	if (wd_dis_pin_mailbox.inbox_status == PACKET_PRESENT)
-    {        
+    {
         switch(wd_dis_pin_mailbox.inbox[COMMAND_BYTE])
         {
             case SET_STATE:
