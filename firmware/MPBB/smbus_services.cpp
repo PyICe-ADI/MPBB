@@ -52,11 +52,10 @@ void set_register_list()
 //└────────┴──────────┴───────────┴┴────────┴──────────┴───────────┴┴─────┘
 void read_register_list()
 {
-    SMBUS_reply reply={.status=0, .lo_byte=0, .hi_byte=0};
     uint8_t increment = smbus_services_mailbox.inbox[DATA_SIZE] / BYTE_SIZE + 1;    // Need Bytes not Bits
     for (uint16_t cmnd_code=0; cmnd_code < SMBUS_read_list_size; cmnd_code++)       // Needs to get as high as 256
     {
-        reply = read_register(  smbus_services_mailbox.inbox[ADDR7],
+        SMBUS_reply reply = read_register(  smbus_services_mailbox.inbox[ADDR7],
                                 SMBUS_cmnd_code_list[(uint8_t)cmnd_code],
                                 smbus_services_mailbox.inbox[USE_PEC],
                                 smbus_services_mailbox.inbox[DATA_SIZE]);
@@ -74,12 +73,12 @@ void read_register_list()
  ****************************************************************************/
 void smbus_read_register()
 {
-    SMBUS_reply reply={.status=0, .lo_byte=0, .hi_byte=0};
+    SMBUS_reply reply;
     reply = read_register(  smbus_services_mailbox.inbox[ADDR7],
                             smbus_services_mailbox.inbox[COMMAND_CODE],
                             smbus_services_mailbox.inbox[USE_PEC],
                             smbus_services_mailbox.inbox[DATA_SIZE]);
-                            
+
     smbus_services_mailbox.outbox[START_OF_DATA_OUT + 0] = reply.status;        // Staus byte leads the way
     smbus_services_mailbox.outbox[START_OF_DATA_OUT + 1] = reply.lo_byte;       // Low Byte or only byte next
     if (smbus_services_mailbox.inbox[DATA_SIZE]==WORD_SIZE)
@@ -93,7 +92,7 @@ void smbus_read_register()
  ****************************************************************************/
 void smbus_write_register()
 {
-    SMBUS_reply reply={.status=0, .lo_byte=0, .hi_byte=0};
+    SMBUS_reply reply;
     reply = write_register( smbus_services_mailbox.inbox[ADDR7],
                             smbus_services_mailbox.inbox[COMMAND_CODE],
                             smbus_services_mailbox.inbox[USE_PEC],
@@ -110,13 +109,12 @@ void smbus_write_register()
  ****************************************************************************/
 void write_register_list() // UNTESTED!!!! //
 {
-    SMBUS_reply reply={.status=0, .lo_byte=0, .hi_byte=0};
     // Message is address/data pairs: [ A,D | A,D | A,D | A,D | A,D | A,D | A,D ]
     if (!(smbus_services_mailbox.inbox_msg_size % 2)) // Odd number of address/data pairs? No soup for you!
     {
         for (uint16_t cmnd_code=0; cmnd_code < (smbus_services_mailbox.inbox_msg_size-START_OF_SMBUS_DATA_IN)/2; cmnd_code+=2)
         {
-            reply = write_register( smbus_services_mailbox.inbox[ADDR7],
+            SMBUS_reply reply = write_register( smbus_services_mailbox.inbox[ADDR7],
                                     smbus_services_mailbox.inbox[START_OF_SMBUS_DATA_IN + cmnd_code],
                                     smbus_services_mailbox.inbox[USE_PEC],
                                     smbus_services_mailbox.inbox[DATA_SIZE],

@@ -32,7 +32,6 @@ void get_temperature_sensor()
                                                         tmp117_mailbox.inbox[USE_PEC],
                                                         tmp117_mailbox.inbox[DATA_SIZE]);
                 tmp117_mailbox.to_id = tmp117_mailbox.from_id;
-                tmp117_mailbox.outbox_msg_size = TMP117_OUTBOX_SIZE;
                 tmp117_mailbox.outbox[START_OF_DATA_OUT + 0] = reply.status;
                 tmp117_mailbox.outbox[START_OF_DATA_OUT + 1] = reply.lo_byte;   // TMP117 is *NOT* SMBus Endianness
                 tmp117_mailbox.outbox[START_OF_DATA_OUT + 2] = reply.hi_byte;   // Swapping is done in the PyICe driver however

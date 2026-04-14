@@ -21,7 +21,7 @@ TMP117_ADDRESS                  = 9
 FAULTB_PIN_ADDRESS              = 10
 MCUERR_PIN_ADDRESS              = 11
 REM_ATH_PIN_ADDRESS             = 12
-    
+
 EMPTY                           = ""
 SET_EN_CMD                      = "\x01"
 GET_EN_CMD                      = "\x02"
@@ -112,7 +112,7 @@ class MPBB(instrument):
         if self.verbose:
             print(f"Sending payload: {payload.encode('latin1')}")
         port.send_payload(payload)
-        
+
     def _get_payload(self, port, datatype):
         x = port.receive_packet()
         if self.verbose:
@@ -122,7 +122,7 @@ class MPBB(instrument):
         elif datatype == "string":
             return port.parser.payload_buffer_as_string
         else:
-            raise(f"BCB606: Don't know data type {datatype}.")
+            raise TypeError(f"MPBB: Don't know data type {datatype}.")
 
     def add_all_channels(self):
         '''Helper function adds all available channels.'''
@@ -168,7 +168,7 @@ class MPBB(instrument):
         self.enablepin_channel.add_preset("HOOK", "Test hook Target")
         self.enablepin_channel._read = _get_enable_pin
         return self._add_channel(self.enablepin_channel)
-        
+
     def add_channel_mcuerrpin(self, channel_name):
         def _set_mcuerr_pin(value):
             payload = None
@@ -351,7 +351,7 @@ class MPBB(instrument):
                 payload = WD_SET_SERVICE_METHOD + int.to_bytes(WD_SERVICE_METHOD_ALGORITHMIC, length=1, byteorder="big").decode("latin-1")
             else:
                 payload = None
-                raise ValueError(f'\n\nBCB606: Sorry don\'t know how to set watchdog service method to "{method}".')
+                raise ValueError(f'\n\nMPBB: Sorry don\'t know how to set watchdog service method to "{method}".')
             if payload != None:
                 self._send_payload(port=self.WATCHDOG_port, payload=payload)
         def _get_wd_service_method():
@@ -369,12 +369,12 @@ class MPBB(instrument):
             return eeprom_records["S/N"]
         new_channel = channel(channel_name, read_function=get_board_id)
         return self._add_channel(new_channel)
-        
+
     def add_channel_TMP117(self, channel_name):
         new_channel = channel(channel_name, read_function=self.TMP117.read_temp)
         new_channel.set_display_format_str(fmt_str="0.2f", suffix='°C')
         return self._add_channel(new_channel)
-        
+
     def reset_board(self):
         self.enablepin_channel.write("OFF")
         self.wddpin_channel.write(True)

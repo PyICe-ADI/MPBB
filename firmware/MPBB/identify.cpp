@@ -85,7 +85,7 @@ void get_serialnum()
 {
 //  https://microchip.my.site.com/s/article/Reading-unique-serial-number-on-SAM-D20-SAM-D21-SAM-R21-devices
 //  https://gist.github.com/mgk/c9ec87436d2d679e5d08
-    
+
     volatile uint32_t word0, word1, word2, word3;
     volatile uint32_t *ptr1 = (volatile uint32_t *)0x0080A00C;
     word0 = *ptr1;
@@ -98,20 +98,20 @@ void get_serialnum()
 
     identify_mailbox.outbox[15-0]  = (word0 & 0x000000ff)   >> 0;
     identify_mailbox.outbox[15-1]  = (word0 & 0x0000ff00)   >> 8;
-    identify_mailbox.outbox[15-2]  = (word0 & 0x00ff0000)   >> 12;
-    identify_mailbox.outbox[15-3]  = (word0 & 0xff000000)   >> 16;
+    identify_mailbox.outbox[15-2]  = (word0 & 0x00ff0000)   >> 16;
+    identify_mailbox.outbox[15-3]  = (word0 & 0xff000000)   >> 24;
     identify_mailbox.outbox[15-4]  = (word1 & 0x000000ff)   >> 0;
     identify_mailbox.outbox[15-5]  = (word1 & 0x0000ff00)   >> 8;
-    identify_mailbox.outbox[15-6]  = (word1 & 0x00ff0000)   >> 12;
-    identify_mailbox.outbox[15-7]  = (word1 & 0xff000000)   >> 16;
+    identify_mailbox.outbox[15-6]  = (word1 & 0x00ff0000)   >> 16;
+    identify_mailbox.outbox[15-7]  = (word1 & 0xff000000)   >> 24;
     identify_mailbox.outbox[15-8]  = (word2 & 0x000000ff)   >> 0;
     identify_mailbox.outbox[15-9]  = (word2 & 0x0000ff00)   >> 8;
-    identify_mailbox.outbox[15-10] = (word2 & 0x00ff0000)   >> 12;
-    identify_mailbox.outbox[15-11] = (word2 & 0xff000000)   >> 16;
+    identify_mailbox.outbox[15-10] = (word2 & 0x00ff0000)   >> 16;
+    identify_mailbox.outbox[15-11] = (word2 & 0xff000000)   >> 24;
     identify_mailbox.outbox[15-12] = (word3 & 0x000000ff)   >> 0;
     identify_mailbox.outbox[15-13] = (word3 & 0x0000ff00)   >> 8;
-    identify_mailbox.outbox[15-14] = (word3 & 0x00ff0000)   >> 12;
-    identify_mailbox.outbox[15-15] = (word3 & 0xff000000)   >> 16;
+    identify_mailbox.outbox[15-14] = (word3 & 0x00ff0000)   >> 16;
+    identify_mailbox.outbox[15-15] = (word3 & 0xff000000)   >> 24;
 
     identify_mailbox.to_id = identify_mailbox.from_id;
     identify_mailbox.outbox_msg_size = 16;

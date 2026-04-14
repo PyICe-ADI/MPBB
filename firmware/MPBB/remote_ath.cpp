@@ -26,8 +26,8 @@ void process_remote_ath_pin()
             {
                 switch(rem_ath_pin_mailbox.inbox[DATA_BYTE_IN])
                 {
-                    case OFF:  digitalWrite(REMOTE_ATH_PIN, LOW);  break; 
-                    case ON:   digitalWrite(REMOTE_ATH_PIN, HIGH); break; 
+                    case OFF:  digitalWrite(REMOTE_ATH_PIN, LOW);  break;
+                    case ON:   digitalWrite(REMOTE_ATH_PIN, HIGH); break;
                 }
             }break;
             case GET_STATE: get_remote_ath_pin_state(); break;

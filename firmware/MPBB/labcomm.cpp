@@ -159,7 +159,7 @@ void get_payload()
         parser_state = GET_ENDAMBLE;        // Hacky state jump needed
         get_endamble();                     // Byte was already consumed
     }
-    else 
+    else
     {
         if (payload_index < labcomm_packet.payload_size)
             labcomm_packet.payload[payload_index++] = the_byte;

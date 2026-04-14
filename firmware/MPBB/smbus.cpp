@@ -11,7 +11,7 @@
  ****************************************************************************/
 SMBUS_reply read_register(uint8_t address, uint8_t command_code, uint8_t use_pec, uint8_t data_size)
 {
-    uint8_t wire_end_error, pec=0;
+    uint8_t wire_end_error;
     SMBUS_reply reply={.status=0, .lo_byte=0, .hi_byte=0};
 
     Wire.beginTransmission(address);                                                                        // START followed by chip ADDRESS.
@@ -24,7 +24,7 @@ SMBUS_reply read_register(uint8_t address, uint8_t command_code, uint8_t use_pec
         reply.hi_byte = Wire.read();                                                                        // Pulls another byte out of the buffer.
     if (use_pec)
     {
-        pec = Wire.read();
+        uint8_t pec = Wire.read();
         if (data_size==BYTE_SIZE)
             reply.status = pec_read_byte_test(address, command_code, reply.lo_byte, pec)==0 ? 0 : SMBUS_PEC_VALUE_ERROR; // Pulls another byte out of the buffer.
         else

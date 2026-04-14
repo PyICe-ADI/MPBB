@@ -13,7 +13,7 @@
 void service_smbus();
 void set_register_list();
 void read_register_list();
-void enable_stream_mode(); 
+void enable_stream_mode();
 void disable_stream_mode();
 void write_register_list();
 void smbus_read_register();
